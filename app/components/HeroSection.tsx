@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import SectionParticles from "./SectionParticles";
 
-export default function HeroSection() {
+type HeroSectionProps = {
+  onGetStarted: () => void;
+};
+
+export default function HeroSection({ onGetStarted }: HeroSectionProps) {
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -22,19 +26,13 @@ export default function HeroSection() {
         transition={{ duration: 2, ease: "easeOut" }}
       />
 
-      {/* Section-level particles (NOW ABOVE SPLINE) */}
-      <SectionParticles
-        density={65}
-        size={1.6}
-        opacity={0.65}
-      />
+      {/* Particles */}
+      <SectionParticles density={65} size={1.6} opacity={0.65} />
 
-      {/* Cinematic Overlay (NOW ABOVE PARTICLES) */}
-      <div className="absolute inset-0 z-[2] 
-                      bg-gradient-to-b 
-                      from-black/55 via-black/20 to-black/65" />
+      {/* Overlay */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/55 via-black/20 to-black/65" />
 
-      {/* Hero Content */}
+      {/* Content */}
       <div className="absolute inset-0 z-[3] flex flex-col items-center justify-center text-white text-center px-6">
         <motion.h1
           initial={{ y: 40, opacity: 0 }}
@@ -69,12 +67,17 @@ export default function HeroSection() {
           </motion.button>
 
           <motion.button
+            onClick={() => {
+            console.log("Hero Get Started clicked");
+            onGetStarted();
+            }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
             className="px-6 py-3 rounded-lg bg-white text-black text-sm hover:bg-gray-200 transition"
-          >
+            >
             Get Started
           </motion.button>
+
         </motion.div>
       </div>
     </motion.section>

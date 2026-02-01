@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-export default function Navbar() {
+type NavbarProps = {
+  onGetStarted: () => void;
+};
+
+export default function Navbar({ onGetStarted }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -20,13 +24,11 @@ export default function Navbar() {
 
   const handleNav = (id: string) => {
     if (pathname === "/") {
-      // Already on homepage → smooth scroll
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // From another page → go to homepage with hash
       router.push(`/#${id}`);
     }
   };
@@ -44,7 +46,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        {/* Logo → ALWAYS HOME */}
+        {/* Logo */}
         <Link
           href="/"
           className="text-white font-semibold text-lg tracking-tight hover:opacity-80 transition"
@@ -52,7 +54,7 @@ export default function Navbar() {
           Decacorn Labs
         </Link>
 
-        {/* Links (UI unchanged, behavior upgraded) */}
+        {/* Links */}
         <div className="hidden md:flex items-center gap-8 text-sm text-white/70">
           <button onClick={() => handleNav("services")} className="hover:text-white transition">
             Services
@@ -67,16 +69,22 @@ export default function Navbar() {
             Contact
           </button>
 
-          {/* Methodology page link */}
           <Link href="/methodology" className="hover:text-white transition">
             Methodology
           </Link>
         </div>
 
-        {/* CTA Button (unchanged UI) */}
-        <button className="px-4 py-2 rounded-lg bg-white text-black text-sm font-medium hover:bg-gray-200 transition">
+        {/* Get Started */}
+        <button
+          onClick={() => {
+          console.log("Navbar Get Started clicked");
+          onGetStarted();
+         }}
+          className="px-4 py-2 rounded-lg bg-white text-black text-sm font-medium hover:bg-gray-200 transition"
+          >
           Get Started
         </button>
+
 
       </div>
     </motion.nav>
