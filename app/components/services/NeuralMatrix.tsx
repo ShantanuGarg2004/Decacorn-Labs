@@ -18,21 +18,59 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
     );
   }, [activeNode]);
 
-  // Calculate node animation delays based on layer
-  const getNodeDelay = (node: ServiceNode) => {
-    if (node.layer === "input") return 0.3;
-    if (node.layer === "hidden") return 0.5;
-    return 0.7; // output layer
+  // Improved timing constants for smooth flow
+  const TIMING = {
+    // Layer emergence delays
+    INPUT_LAYER_START: 0.3,
+    INPUT_LAYER_STAGGER: 0.12,
+    HIDDEN_LAYER_START: 0.9,  // Starts after input layer completes
+    HIDDEN_LAYER_STAGGER: 0.1,
+    OUTPUT_LAYER_START: 1.6,  // Starts after hidden layer completes
+    OUTPUT_LAYER_STAGGER: 0.15,
+    
+    // Connection timing
+    INPUT_TO_HIDDEN_START: 1.1,  // Starts slightly before hidden nodes fully emerge
+    INPUT_TO_HIDDEN_STAGGER: 0.015,
+    HIDDEN_TO_OUTPUT_START: 1.8,  // Starts slightly before output nodes fully emerge
+    HIDDEN_TO_OUTPUT_STAGGER: 0.02,
+    
+    // Animation durations
+    NODE_DURATION: 0.7,
+    CONNECTION_DURATION: 0.6,
+  };
+
+  // Calculate node animation timing based on layer and index
+  const getNodeTiming = (node: ServiceNode, nodeIndex: number) => {
+    const layerNodes = nodes.filter(n => n.layer === node.layer);
+    const indexInLayer = layerNodes.findIndex(n => n.id === node.id);
+    
+    if (node.layer === "input") {
+      return {
+        delay: TIMING.INPUT_LAYER_START + (indexInLayer * TIMING.INPUT_LAYER_STAGGER),
+        duration: TIMING.NODE_DURATION,
+      };
+    }
+    if (node.layer === "hidden") {
+      return {
+        delay: TIMING.HIDDEN_LAYER_START + (indexInLayer * TIMING.HIDDEN_LAYER_STAGGER),
+        duration: TIMING.NODE_DURATION,
+      };
+    }
+    // output layer
+    return {
+      delay: TIMING.OUTPUT_LAYER_START + (indexInLayer * TIMING.OUTPUT_LAYER_STAGGER),
+      duration: TIMING.NODE_DURATION,
+    };
   };
 
   return (
     <motion.div
       className="relative w-full mx-auto flex items-center justify-center"
-      initial={{ opacity: 0, scale: 0.3 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ 
-        duration: 1.2, 
-        ease: [0.34, 1.56, 0.64, 1], // Spring-like bounce
+        duration: 0.8, 
+        ease: [0.25, 0.1, 0.25, 1],
       }}
       viewport={{ once: true }}
       onClick={() => setActiveNode(null)}
@@ -56,7 +94,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
         transition={{ 
           opacity: { duration: 0.4 },
           y: { duration: 0.4 },
-          delay: activeNode ? 0 : 1.6, // Appears after network emerges
+          delay: activeNode ? 0 : 2.4, // Appears after entire network emerges
         }}
         className="absolute -bottom-16 left-1/2 -translate-x-1/2 pointer-events-none z-50"
       >
@@ -143,19 +181,15 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
             </filter>
           </defs>
 
-          {/* All connections */}
-          {[...edges.inputToHidden, ...edges.hiddenToOutput].map((edge, i) => {
+          {/* Input to Hidden connections */}
+          {edges.inputToHidden.map((edge, i) => {
             const from = nodes.find((n) => n.id === edge.from)!;
             const to = nodes.find((n) => n.id === edge.to)!;
             const isActive = activeEdges.some(e => e.from === edge.from && e.to === edge.to);
-            
-            // Determine connection animation delay based on layers
-            const isInputToHidden = i < edges.inputToHidden.length;
-            const connectionDelay = isInputToHidden ? 0.6 : 0.9;
 
             return (
-              <g key={`edge-${i}`}>
-                {/* Base connection line with emergence animation */}
+              <g key={`edge-input-hidden-${i}`}>
+                {/* Base connection line with sequential emergence */}
                 <motion.line
                   x1={`${from.x}%`}
                   y1={`${from.y}%`}
@@ -167,9 +201,71 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   whileInView={{ pathLength: 1, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{
-                    pathLength: { duration: 0.5, delay: connectionDelay + (i * 0.02) },
-                    opacity: { duration: 0.3, delay: connectionDelay + (i * 0.02) },
-                    ease: "easeOut",
+                    pathLength: { 
+                      duration: TIMING.CONNECTION_DURATION, 
+                      delay: TIMING.INPUT_TO_HIDDEN_START + (i * TIMING.INPUT_TO_HIDDEN_STAGGER),
+                      ease: "easeOut",
+                    },
+                    opacity: { 
+                      duration: 0.2, 
+                      delay: TIMING.INPUT_TO_HIDDEN_START + (i * TIMING.INPUT_TO_HIDDEN_STAGGER),
+                    },
+                  }}
+                />
+                
+                {/* Active animated line */}
+                {isActive && (
+                  <motion.line
+                    x1={`${from.x}%`}
+                    y1={`${from.y}%`}
+                    x2={`${to.x}%`}
+                    y2={`${to.y}%`}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeWidth="1.5"
+                    strokeDasharray="6 4"
+                    filter="url(#glow)"
+                    initial={{ strokeDashoffset: 20 }}
+                    animate={{ strokeDashoffset: 0 }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                )}
+              </g>
+            );
+          })}
+
+          {/* Hidden to Output connections */}
+          {edges.hiddenToOutput.map((edge, i) => {
+            const from = nodes.find((n) => n.id === edge.from)!;
+            const to = nodes.find((n) => n.id === edge.to)!;
+            const isActive = activeEdges.some(e => e.from === edge.from && e.to === edge.to);
+
+            return (
+              <g key={`edge-hidden-output-${i}`}>
+                {/* Base connection line with sequential emergence */}
+                <motion.line
+                  x1={`${from.x}%`}
+                  y1={`${from.y}%`}
+                  x2={`${to.x}%`}
+                  y2={`${to.y}%`}
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeWidth="1"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    pathLength: { 
+                      duration: TIMING.CONNECTION_DURATION, 
+                      delay: TIMING.HIDDEN_TO_OUTPUT_START + (i * TIMING.HIDDEN_TO_OUTPUT_STAGGER),
+                      ease: "easeOut",
+                    },
+                    opacity: { 
+                      duration: 0.2, 
+                      delay: TIMING.HIDDEN_TO_OUTPUT_START + (i * TIMING.HIDDEN_TO_OUTPUT_STAGGER),
+                    },
                   }}
                 />
                 
@@ -202,7 +298,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
         {nodes.map((node, nodeIndex) => {
           const Icon = node.icon;
           const isActive = activeNode?.id === node.id;
-          const nodeDelay = getNodeDelay(node);
+          const timing = getNodeTiming(node, nodeIndex);
 
           return (
             <motion.div
@@ -216,18 +312,18 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 left: `${node.x}%`, 
                 top: `${node.y}%`,
               }}
-              // Emergence animation
+              // Sequential emergence animation by layer
               initial={{ scale: 0, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.6,
-                delay: nodeDelay + (nodeIndex % 4) * 0.08,
+                duration: timing.duration,
+                delay: timing.delay,
                 ease: [0.34, 1.56, 0.64, 1], // Spring bounce
               }}
               whileHover={{ scale: 1.08 }}
             >
-              {/* NODE CIRCLE - FIXED: Merged duplicate transition props */}
+              {/* NODE CIRCLE */}
               <motion.div
                 className="relative rounded-full flex items-center justify-center"
                 style={{
@@ -242,7 +338,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 }}
                 // Initial emergence glow
                 initial={{ 
-                  boxShadow: "0 0 0px rgba(255, 255, 255, 0)" 
+                  boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
                 }}
                 whileInView={{ 
                   boxShadow: [
@@ -268,9 +364,9 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   width: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   height: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   boxShadow: {
-                    duration: isActive ? 2 : 1,
-                    delay: nodeDelay + (nodeIndex % 4) * 0.08,
-                    times: [0, 0.5, 1],
+                    duration: isActive ? 2 : 0.8,
+                    delay: timing.delay,
+                    times: [0, 0.6, 1],
                     repeat: isActive ? Infinity : 0,
                     ease: "easeInOut",
                   }
@@ -284,8 +380,8 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   whileInView={{ opacity: 1, rotate: 0 }}
                   viewport={{ once: true }}
                   transition={{ 
-                    duration: 0.8, 
-                    delay: nodeDelay + (nodeIndex % 4) * 0.08 + 0.2,
+                    duration: 0.7, 
+                    delay: timing.delay + 0.15,
                     ease: [0.34, 1.56, 0.64, 1],
                   }}
                 >
