@@ -227,7 +227,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
               }}
               whileHover={{ scale: 1.08 }}
             >
-              {/* NODE CIRCLE */}
+              {/* NODE CIRCLE - FIXED: Merged duplicate transition props */}
               <motion.div
                 className="relative rounded-full flex items-center justify-center"
                 style={{
@@ -252,13 +252,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   ]
                 }}
                 viewport={{ once: true }}
-                transition={{
-                  boxShadow: {
-                    duration: 1,
-                    delay: nodeDelay + (nodeIndex % 4) * 0.08,
-                    times: [0, 0.5, 1],
-                  }
-                }}
                 animate={{
                   width: activeNode ? "64px" : "80px",
                   height: activeNode ? "64px" : "80px",
@@ -271,10 +264,13 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                     : "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
                 transition={{
+                  // Merged all transition configs into one
                   width: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   height: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   boxShadow: {
-                    duration: 2,
+                    duration: isActive ? 2 : 1,
+                    delay: nodeDelay + (nodeIndex % 4) * 0.08,
+                    times: [0, 0.5, 1],
                     repeat: isActive ? Infinity : 0,
                     ease: "easeInOut",
                   }
