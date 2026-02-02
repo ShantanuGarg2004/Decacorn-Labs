@@ -14,12 +14,24 @@ export default function ServicesSection() {
       <div className="max-w-[1600px] mx-auto px-8 w-full">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-semibold">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-semibold"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             How intelligence flows through our systems
-          </h2>
-          <p className="mt-4 text-white/60 max-w-3xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            className="mt-4 text-white/60 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             From raw inputs to real-world execution — powered by AI at the core.
-          </p>
+          </motion.p>
         </div>
 
         {/* Main Content Area - Adaptive Layout */}

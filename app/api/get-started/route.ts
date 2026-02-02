@@ -14,6 +14,7 @@ export async function POST(req: Request) {
       email,
       phone,
       company,
+      companyDomain,
       service,
       description,
     } = body;
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone || "—"}</p>
         <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Company Domain:</strong> ${companyDomain || "—"}</p>
         <p><strong>Service:</strong> ${service}</p>
         <p><strong>Description:</strong></p>
         <p>${description || "—"}</p>
@@ -50,7 +52,7 @@ export async function POST(req: Request) {
 
         <p>
           Thanks for reaching out to <strong>Decacorn Labs</strong>.
-          We’ve received your message and someone from our team
+          We've received your message and someone from our team
           will review it shortly.
         </p>
 
