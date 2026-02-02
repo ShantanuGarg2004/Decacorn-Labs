@@ -1,24 +1,22 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-export const runtime = "nodejs"; // REQUIRED for Resend
+export const runtime = "nodejs";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const apiKey = process.env.RESEND_API_KEY;
-
-    if (!apiKey) {
-      console.error("RESEND_API_KEY is missing");
-      return NextResponse.json(
-        { error: "Email service not configured" },
-        { status: 500 }
-      );
-    }
-
-    const resend = new Resend(apiKey);
-
     const body = await req.json();
-    const { name, email, phone, company, service, description } = body;
+
+    const {
+      name,
+      email,
+      phone,
+      company,
+      service,
+      description,
+    } = body;
 
     if (!name || !email || !company || !service) {
       return NextResponse.json(
@@ -27,36 +25,54 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await resend.emails.send({
-      from: "Decacorn Labs <no-reply@send.decacornlabs.com>",
+    await resend.emails.send({
+      from: process.env.FROM_EMAIL!,
       to: process.env.CONTACT_RECEIVER_EMAIL!,
-      replyTo: email,
-      subject: "🚀 New Get Started Lead — Decacorn Labs",
+      subject: `New Lead — ${name}`,
       html: `
-        <h2>New Lead</h2>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Phone:</b> ${phone || "N/A"}</p>
-        <p><b>Company:</b> ${company}</p>
-        <p><b>Service:</b> ${service}</p>
-        <p><b>Description:</b></p>
-        <p>${description || "N/A"}</p>
+        <h2>New Get Started Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "—"}</p>
+        <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Service:</strong> ${service}</p>
+        <p><strong>Description:</strong></p>
+        <p>${description || "—"}</p>
       `,
     });
 
-    if (result.error) {
-      console.error("Resend error:", result.error);
-      return NextResponse.json(
-        { error: "Failed to send email" },
-        { status: 500 }
-      );
-    }
+    await resend.emails.send({
+      from: process.env.FROM_EMAIL!,
+      to: email,
+      subject: "We received your message — Decacorn Labs",
+      html: `
+        <p>Hi ${name},</p>
+
+        <p>
+          Thanks for reaching out to <strong>Decacorn Labs</strong>.
+          We’ve received your message and someone from our team
+          will review it shortly.
+        </p>
+
+        <p>
+          You can expect a response within <strong>24 hours</strong>.
+          If your request is urgent, feel free to reply directly
+          to this email.
+        </p>
+
+        <p>
+          — Decacorn Labs<br />
+          <em>Building AI systems that think, guide, and execute</em>
+        </p>
+      `,
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Get Started API error:", error);
+
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to send emails" },
       { status: 500 }
     );
   }
