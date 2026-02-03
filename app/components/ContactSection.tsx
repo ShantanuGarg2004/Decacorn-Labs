@@ -106,6 +106,16 @@ export default function ContactSection() {
               onClick={() => copyToClipboard("hr@alumna.ai", "email")}
               className="text-sm text-neutral-400 hover:text-white transition-colors"
             >
+              ayushsharma1709@gmail.com
+            </button>
+            {copied === "email" && (
+              <p className="mt-3 text-xs text-neutral-500">Copied to clipboard</p>
+            )}
+            <br></br>
+            <button
+              onClick={() => copyToClipboard("hr@alumna.ai", "email")}
+              className="text-sm text-neutral-400 hover:text-white transition-colors"
+            >
               hr@alumna.ai
             </button>
             {copied === "email" && (
