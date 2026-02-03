@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function DecacornEcosystemSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -22,16 +23,146 @@ export default function DecacornEcosystemSection() {
     );
 
     observer.observe(section);
-
     return () => observer.disconnect();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full py-24 border-t border-neutral-800 overflow-hidden"
+      className="relative w-full py-24 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      <div className="max-w-6xl mx-auto px-6">
+      {/* Interconnected Network Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Hexagonal Grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          <defs>
+            <pattern id="hexagons" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+              <polygon 
+                points="30,0 60,17 60,35 30,52 0,35 0,17" 
+                fill="none" 
+                stroke="rgba(255,255,255,0.2)" 
+                strokeWidth="0.5"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hexagons)"/>
+        </svg>
+
+        {/* Connected Nodes Network */}
+        <svg className="absolute inset-0 w-full h-full opacity-20">
+          {/* Connection lines */}
+          {[
+            [[20, 30], [50, 40]],
+            [[50, 40], [80, 35]],
+            [[20, 30], [35, 60]],
+            [[35, 60], [65, 65]],
+            [[65, 65], [80, 35]],
+            [[50, 40], [65, 65]],
+          ].map((line, i) => (
+            <motion.line
+              key={i}
+              x1={`${line[0][0]}%`}
+              y1={`${line[0][1]}%`}
+              x2={`${line[1][0]}%`}
+              y2={`${line[1][1]}%`}
+              stroke="rgba(139, 92, 246, 0.3)"
+              strokeWidth="1"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.3 }}
+              transition={{
+                duration: 1.5,
+                delay: 0.5 + i * 0.1,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+          
+          {/* Network nodes */}
+          {[
+            [20, 30],
+            [50, 40],
+            [80, 35],
+            [35, 60],
+            [65, 65],
+          ].map((pos, i) => (
+            <motion.circle
+              key={i}
+              cx={`${pos[0]}%`}
+              cy={`${pos[1]}%`}
+              r="4"
+              fill="rgba(139, 92, 246, 0.5)"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ 
+                scale: [0, 1.2, 1],
+                opacity: [0, 1, 0.5],
+              }}
+              transition={{
+                duration: 0.8,
+                delay: 0.8 + i * 0.15,
+              }}
+            >
+              <animate
+                attributeName="r"
+                values="4;6;4"
+                dur="3s"
+                repeatCount="indefinite"
+              />
+            </motion.circle>
+          ))}
+        </svg>
+
+        {/* Glowing Orbs */}
+        <motion.div
+          className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-20"
+          style={{
+            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+          animate={{
+            scale: [1, 1.15, 1],
+            x: [0, 20, 0],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Floating Particles */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-purple-400/40 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -40, 0],
+              opacity: [0, 0.6, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.5) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Title */}
         <h2
           className={`text-3xl font-semibold text-white mb-6 transition-all duration-700 ease-out
@@ -102,16 +233,6 @@ export default function DecacornEcosystemSection() {
           </Link>
         </div>
       </div>
-
-      {/* AI OS glow effect */}
-      <div
-        className={`pointer-events-none absolute inset-0 transition-opacity duration-1000
-        ${visible ? "opacity-100" : "opacity-0"}`}
-        style={{
-          background:
-            "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06), transparent 40%)",
-        }}
-      />
     </section>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -35,9 +36,90 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative w-full py-24 border-t border-neutral-800 overflow-hidden"
+      className="relative w-full py-24 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      <div className="max-w-6xl mx-auto px-6">
+      {/* Clean Communication Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Subtle Grid */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+          }}
+        />
+
+        {/* Communication Signal Waves */}
+        <div className="absolute inset-0">
+          {[...Array(4)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/10"
+              style={{
+                width: '200px',
+                height: '200px',
+              }}
+              animate={{
+                width: ['200px', '800px'],
+                height: ['200px', '800px'],
+                opacity: [0.3, 0],
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 1,
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Connection Dots */}
+        {[
+          { x: '25%', y: '30%' },
+          { x: '50%', y: '50%' },
+          { x: '75%', y: '30%' },
+        ].map((pos, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 rounded-full bg-blue-400/40"
+            style={{ left: pos.x, top: pos.y }}
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.4, 0.8, 0.4],
+            }}
+            transition={{
+              duration: 2,
+              delay: i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Glowing Center */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+          style={{
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+          }}
+        />
+
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Title */}
         <h2
           className={`text-3xl font-semibold text-white mb-6 transition-all duration-700 ease-out
@@ -51,8 +133,8 @@ export default function ContactSection() {
           className={`text-neutral-400 max-w-2xl leading-relaxed transition-all duration-700 delay-150 ease-out
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
         >
-          Whether you’re building intelligence-driven products or exploring AI-powered
-          execution systems, we’d love to connect.
+          Whether you're building intelligence-driven products or exploring AI-powered
+          execution systems, we'd love to connect.
         </p>
 
         {/* Contact Cards */}
@@ -103,22 +185,18 @@ export default function ContactSection() {
           >
             <h3 className="text-white font-medium mb-3">Email</h3>
             <button
-              onClick={() => copyToClipboard("hr@alumna.ai", "email")}
-              className="text-sm text-neutral-400 hover:text-white transition-colors"
+              onClick={() => copyToClipboard("ayushsharma1709@gmail.com", "email1")}
+              className="text-sm text-neutral-400 hover:text-white transition-colors block mb-2"
             >
               ayushsharma1709@gmail.com
             </button>
-            {copied === "email" && (
-              <p className="mt-3 text-xs text-neutral-500">Copied to clipboard</p>
-            )}
-            <br></br>
             <button
-              onClick={() => copyToClipboard("hr@alumna.ai", "email")}
-              className="text-sm text-neutral-400 hover:text-white transition-colors"
+              onClick={() => copyToClipboard("hr@alumna.ai", "email2")}
+              className="text-sm text-neutral-400 hover:text-white transition-colors block"
             >
               hr@alumna.ai
             </button>
-            {copied === "email" && (
+            {(copied === "email1" || copied === "email2") && (
               <p className="mt-3 text-xs text-neutral-500">Copied to clipboard</p>
             )}
           </div>
@@ -145,16 +223,6 @@ export default function ContactSection() {
           </div>
         </div>
       </div>
-
-      {/* AI OS glow */}
-      <div
-        className={`pointer-events-none absolute inset-0 transition-opacity duration-1000
-        ${visible ? "opacity-100" : "opacity-0"}`}
-        style={{
-          background:
-            "radial-gradient(circle at 70% 30%, rgba(255,255,255,0.05), transparent 40%)",
-        }}
-      />
     </section>
   );
 }

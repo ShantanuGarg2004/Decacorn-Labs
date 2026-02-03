@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 function Reveal({
   children,
@@ -46,10 +47,100 @@ export default function VisionSection() {
   return (
     <section
       id="vision"
-      className="relative w-full py-28 border-t border-neutral-800 overflow-hidden"
+      className="relative w-full py-28 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      <div className="max-w-6xl mx-auto px-6">
+      {/* Futuristic Grid Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Perspective Grid */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            transform: 'perspective(1000px) rotateX(60deg)',
+            transformOrigin: 'center top',
+          }}
+        />
+        
+        {/* Glowing Orb - Center */}
+        <motion.div
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-15"
+          style={{
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.15, 0.25, 0.15],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
+        {/* Diagonal Light Rays */}
+        <div className="absolute inset-0 opacity-10">
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-full w-1"
+              style={{
+                left: `${20 + i * 15}%`,
+                background: 'linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3), transparent)',
+                transform: 'skewX(-20deg)',
+              }}
+              animate={{
+                opacity: [0.1, 0.3, 0.1],
+              }}
+              transition={{
+                duration: 3,
+                delay: i * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Floating Particles */}
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1.5 h-1.5 bg-purple-400/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -50, 0],
+              opacity: [0, 0.5, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Title */}
         <Reveal>
           <h2 className="text-3xl md:text-4xl font-semibold text-white max-w-3xl">
@@ -68,7 +159,6 @@ export default function VisionSection() {
 
         {/* Vision Pillars */}
         <div className="mt-20 grid md:grid-cols-3 gap-8">
-
           {/* Pillar 1 */}
           <Reveal delay={200}>
             <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm 
@@ -114,9 +204,9 @@ export default function VisionSection() {
 
         {/* Bold Statement (Signature Line) */}
         <Reveal delay={650}>
-          <div className="mt-24 p-8 rounded-xl border border-neutral-800 bg-black/40 text-center">
+          <div className="mt-24 p-8 rounded-xl border border-neutral-800 bg-black/40 text-center backdrop-blur-sm">
             <p className="text-xl md:text-2xl font-medium text-white">
-              “Decacorn is building the operating system for execution.”
+              "Decacorn is building the operating system for execution."
             </p>
             <p className="mt-3 text-neutral-500 text-sm">
               Not a product. Not a platform. A new paradigm.
@@ -124,15 +214,6 @@ export default function VisionSection() {
           </div>
         </Reveal>
       </div>
-
-      {/* AI OS glow */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          background:
-            "radial-gradient(circle at 60% 30%, rgba(255,255,255,0.05), transparent 40%)",
-        }}
-      />
     </section>
   );
 }

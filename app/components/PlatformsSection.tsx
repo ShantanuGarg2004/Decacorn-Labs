@@ -30,9 +30,119 @@ export default function PlatformsSection() {
   return (
     <section
       id="platforms"
-      className="relative bg-black text-white py-28 px-6"
+      className="relative bg-black text-white py-28 px-6 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Platform Showcase Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Diagonal Grid */}
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `
+              linear-gradient(45deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+              linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
+
+        {/* Floating Platform Cards Effect */}
+        <svg className="absolute inset-0 w-full h-full opacity-5">
+          {[...Array(8)].map((_, i) => (
+            <motion.rect
+              key={i}
+              x={`${10 + i * 12}%`}
+              y={`${20 + (i % 3) * 25}%`}
+              width="80"
+              height="60"
+              rx="8"
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.3)"
+              strokeWidth="1"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: [0, 0.3, 0],
+                y: [20, 0, -20],
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </svg>
+
+        {/* Gradient Spotlights */}
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-15"
+          style={{
+            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%)',
+            filter: 'blur(100px)',
+          }}
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-15"
+          style={{
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+            filter: 'blur(100px)',
+          }}
+          animate={{
+            x: [0, -50, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Particle System */}
+        {[...Array(25)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white/20 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -60, 0],
+              opacity: [0, 0.5, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.7) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto">
         {/* SECTION HEADER */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
@@ -164,9 +274,6 @@ export default function PlatformsSection() {
           More AI-native platforms are currently in development.
         </motion.div>
       </div>
-
-      {/* BACKGROUND FADE */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
     </section>
   );
 }

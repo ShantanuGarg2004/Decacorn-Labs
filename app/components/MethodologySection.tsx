@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 function Reveal({
   children,
@@ -44,9 +45,107 @@ function Reveal({
 
 export default function MethodologySection() {
   return (
-    <section className="relative w-full py-28 border-t border-neutral-800 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="relative w-full py-28 border-t border-neutral-800 overflow-hidden bg-black">
+      {/* Flowchart/Process Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Dot Grid Pattern */}
+        <div 
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
 
+        {/* Animated Process Flow Lines */}
+        <svg className="absolute inset-0 w-full h-full opacity-10">
+          {/* Horizontal flowing lines */}
+          {[...Array(6)].map((_, i) => (
+            <g key={i}>
+              <motion.line
+                x1="0%"
+                y1={`${15 + i * 15}%`}
+                x2="100%"
+                y2={`${15 + i * 15}%`}
+                stroke="rgba(99, 102, 241, 0.3)"
+                strokeWidth="1"
+                strokeDasharray="8 4"
+                initial={{ strokeDashoffset: 0 }}
+                animate={{ strokeDashoffset: -12 }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+              {/* Flow arrows */}
+              <motion.circle
+                cx="10%"
+                cy={`${15 + i * 15}%`}
+                r="3"
+                fill="rgba(99, 102, 241, 0.4)"
+                animate={{
+                  cx: ["10%", "90%"],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "linear",
+                  delay: i * 0.5,
+                }}
+              />
+            </g>
+          ))}
+        </svg>
+
+        {/* Glowing Process Nodes */}
+        <div className="absolute inset-0">
+          {[
+            { x: '20%', y: '25%' },
+            { x: '50%', y: '35%' },
+            { x: '80%', y: '45%' },
+            { x: '35%', y: '65%' },
+            { x: '65%', y: '75%' },
+          ].map((pos, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3 h-3 rounded-full bg-blue-500/30"
+              style={{ left: pos.x, top: pos.y }}
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 2,
+                delay: i * 0.3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-md" />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Gradient Overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%)',
+          }}
+        />
+
+        {/* Vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.5) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* HERO */}
         <Reveal>
           <h2 className="text-4xl md:text-5xl font-semibold text-white max-w-3xl">
@@ -106,7 +205,7 @@ export default function MethodologySection() {
               ].map(([title, desc]) => (
                 <div
                   key={title}
-                  className="p-4 rounded-lg border border-neutral-800 bg-neutral-900/30 hover:border-neutral-600 transition-all"
+                  className="p-4 rounded-lg border border-neutral-800 bg-neutral-900/30 hover:border-neutral-600 transition-all backdrop-blur-sm"
                 >
                   <p className="text-white text-sm font-medium">{title}</p>
                   <p className="text-neutral-400 text-sm mt-1">{desc}</p>
@@ -142,7 +241,7 @@ export default function MethodologySection() {
               ].map((item, i) => (
                 <div
                   key={item.title}
-                  className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300"
+                  className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300 backdrop-blur-sm"
                   style={{ transitionDelay: `${i * 120}ms` }}
                 >
                   <p className="text-white font-medium">{item.title}</p>
@@ -152,6 +251,7 @@ export default function MethodologySection() {
             </div>
           </Reveal>
         </div>
+
         {/* METHODOLOGY MODULES */}
         <div className="mt-28 grid md:grid-cols-3 gap-8">
           {[
@@ -171,7 +271,7 @@ export default function MethodologySection() {
             },
           ].map((item, i) => (
             <Reveal key={item.title} delay={i * 150}>
-              <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
+              <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300 backdrop-blur-sm">
                 <h4 className="text-white font-medium">{item.title}</h4>
                 <p className="mt-3 text-neutral-400 text-sm leading-relaxed">
                   {item.flow}
@@ -199,7 +299,7 @@ export default function MethodologySection() {
               ].map(([oldWay, newWay]) => (
                 <div
                   key={oldWay}
-                  className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/40 flex justify-between hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300"
+                  className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/40 flex justify-between hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300 backdrop-blur-sm"
                 >
                   <span className="text-neutral-400">{oldWay}</span>
                   <span className="text-white">→ {newWay}</span>
@@ -216,15 +316,6 @@ export default function MethodologySection() {
           </Reveal>
         </div>
       </div>
-
-      {/* AI OS glow */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          background:
-            "radial-gradient(circle at 40% 20%, rgba(255,255,255,0.05), transparent 40%)",
-        }}
-      />
     </section>
   );
 }
