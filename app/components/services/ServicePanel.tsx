@@ -51,12 +51,12 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: 40, scale: 0.95 }}
           transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="w-[440px] text-left"
+          className="w-full md:w-[440px] text-left"
           style={{
             background: "rgba(255, 255, 255, 0.03)",
             border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "12px",
-            padding: "32px",
+            padding: "24px",
             backdropFilter: "blur(12px)",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
           }}
@@ -68,7 +68,7 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
             transition={{ delay: 0.1, duration: 0.4 }}
           >
             <h3 
-              className="text-3xl font-semibold mb-2"
+              className="text-2xl md:text-3xl font-semibold mb-2"
               style={{
                 color: "rgba(255, 255, 255, 0.95)",
                 letterSpacing: "-0.01em",
@@ -83,7 +83,7 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.4 }}
-            className="text-base mb-6"
+            className="text-sm md:text-base mb-5 md:mb-6"
             style={{
               color: "rgba(255, 255, 255, 0.6)",
               fontWeight: 400,
@@ -100,20 +100,20 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
             style={{
               height: "1px",
               background: "rgba(255, 255, 255, 0.1)",
-              marginBottom: "24px",
+              marginBottom: "20px",
               transformOrigin: "left",
             }}
           />
 
           {/* Capabilities with character-by-character animation */}
-          <div className="space-y-5">
+          <div className="space-y-4 md:space-y-5">
             {node.capabilities.map((_, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: displayedText[i] ? 1 : 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-start gap-3"
+                className="flex items-start gap-2 md:gap-3"
               >
                 {/* Bullet point */}
                 <div 
@@ -127,7 +127,7 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
                 />
                 
                 <p
-                  className="text-[15px] leading-relaxed"
+                  className="text-sm md:text-[15px] leading-relaxed"
                   style={{
                     color: "rgba(255, 255, 255, 0.8)",
                     fontWeight: 400,
@@ -158,7 +158,7 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-8 pt-6"
+            className="mt-6 md:mt-8 pt-5 md:pt-6"
             style={{
               borderTop: "1px solid rgba(255, 255, 255, 0.08)",
             }}
@@ -180,7 +180,7 @@ export default function ServicePanel({ node }: { node: ServiceNode | null }) {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 + i * 0.05, duration: 0.3 }}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full"
+                  className="px-2.5 md:px-3 py-1 md:py-1.5 text-xs font-medium rounded-full"
                   style={{
                     background: "rgba(255, 255, 255, 0.08)",
                     border: "1px solid rgba(255, 255, 255, 0.15)",

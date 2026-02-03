@@ -10,12 +10,12 @@ export default function ServicesSection() {
   const [activeNode, setActiveNode] = useState<ServiceNode | null>(null);
 
   return (
-    <section id="services" className="bg-black text-white py-32 min-h-screen flex items-center">
-      <div className="max-w-[1600px] mx-auto px-8 w-full">
+    <section id="services" className="bg-black text-white py-20 md:py-32 min-h-screen flex items-center">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 w-full">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.h2 
-            className="text-4xl md:text-5xl font-semibold"
+            className="text-3xl md:text-4xl lg:text-5xl font-semibold px-4"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -24,7 +24,7 @@ export default function ServicesSection() {
             How intelligence flows through our systems
           </motion.h2>
           <motion.p 
-            className="mt-4 text-white/60 max-w-3xl mx-auto"
+            className="mt-3 md:mt-4 text-white/60 max-w-3xl mx-auto px-4 text-sm md:text-base"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -34,31 +34,31 @@ export default function ServicesSection() {
           </motion.p>
         </div>
 
-        {/* Main Content Area - Adaptive Layout */}
+        {/* Main Content Area - Responsive Layout */}
         <motion.div 
-          className="relative flex items-center justify-center"
+          className="relative flex flex-col md:flex-row items-center justify-center"
           animate={{
-            gap: activeNode ? "48px" : "0px",
+            gap: activeNode ? "32px" : "0px",
           }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          {/* Neural Matrix - Scales down when node is active */}
-          <div className="flex-shrink-0">
+          {/* Neural Matrix - Always full width on mobile, scales on desktop */}
+          <div className="flex-shrink-0 w-full md:w-auto">
             <NeuralMatrix
               activeNode={activeNode}
               setActiveNode={setActiveNode}
             />
           </div>
 
-          {/* Service Panel - Slides in when node is active */}
+          {/* Service Panel - Below network on mobile, side-by-side on desktop */}
           <motion.div
-            initial={{ opacity: 0, width: 0 }}
+            initial={{ opacity: 0, height: 0 }}
             animate={{ 
               opacity: activeNode ? 1 : 0,
-              width: activeNode ? "auto" : 0,
+              height: activeNode ? "auto" : 0,
             }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex-shrink-0 overflow-hidden"
+            className="flex-shrink-0 overflow-hidden w-full md:w-auto mt-8 md:mt-0"
           >
             <ServicePanel node={activeNode} />
           </motion.div>

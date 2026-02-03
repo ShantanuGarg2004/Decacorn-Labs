@@ -23,15 +23,15 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
     // Layer emergence delays
     INPUT_LAYER_START: 0.3,
     INPUT_LAYER_STAGGER: 0.12,
-    HIDDEN_LAYER_START: 0.9,  // Starts after input layer completes
+    HIDDEN_LAYER_START: 0.9,
     HIDDEN_LAYER_STAGGER: 0.1,
-    OUTPUT_LAYER_START: 1.6,  // Starts after hidden layer completes
+    OUTPUT_LAYER_START: 1.6,
     OUTPUT_LAYER_STAGGER: 0.15,
     
     // Connection timing
-    INPUT_TO_HIDDEN_START: 1.1,  // Starts slightly before hidden nodes fully emerge
+    INPUT_TO_HIDDEN_START: 1.1,
     INPUT_TO_HIDDEN_STAGGER: 0.015,
-    HIDDEN_TO_OUTPUT_START: 1.8,  // Starts slightly before output nodes fully emerge
+    HIDDEN_TO_OUTPUT_START: 1.8,
     HIDDEN_TO_OUTPUT_STAGGER: 0.02,
     
     // Animation durations
@@ -74,14 +74,19 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
       }}
       viewport={{ once: true }}
       onClick={() => setActiveNode(null)}
-      // Dynamic sizing based on active state
+      // Dynamic sizing - responsive
       animate={{
-        width: activeNode ? "600px" : "900px",
-        height: activeNode ? "400px" : "500px",
-        scale: activeNode ? 0.9 : 1,
+        width: activeNode 
+          ? typeof window !== 'undefined' && window.innerWidth < 768 ? "100%" : "600px"
+          : typeof window !== 'undefined' && window.innerWidth < 768 ? "100%" : "900px",
+        height: activeNode
+          ? typeof window !== 'undefined' && window.innerWidth < 768 ? "300px" : "400px"
+          : typeof window !== 'undefined' && window.innerWidth < 768 ? "400px" : "500px",
+        scale: activeNode && typeof window !== 'undefined' && window.innerWidth >= 768 ? 0.9 : 1,
       }}
       style={{
         transition: "all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        maxWidth: "100%",
       }}
     >
       {/* CLICK PROMPT - Only visible when no node is active */}
@@ -94,9 +99,9 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
         transition={{ 
           opacity: { duration: 0.4 },
           y: { duration: 0.4 },
-          delay: activeNode ? 0 : 2.4, // Appears after entire network emerges
+          delay: activeNode ? 0 : 2.4,
         }}
-        className="absolute -bottom-16 left-1/2 -translate-x-1/2 pointer-events-none z-50"
+        className="absolute -bottom-12 md:-bottom-16 left-1/2 -translate-x-1/2 pointer-events-none z-50"
       >
         <motion.div
           animate={{
@@ -107,7 +112,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="flex items-center gap-3 px-6 py-3 rounded-full"
+          className="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-full"
           style={{
             background: "rgba(255, 255, 255, 0.05)",
             border: "1px solid rgba(255, 255, 255, 0.2)",
@@ -126,7 +131,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-2 h-2 rounded-full"
+            className="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full"
             style={{
               background: "rgba(255, 255, 255, 0.8)",
               boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)",
@@ -135,7 +140,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
           
           {/* Text */}
           <span 
-            className="text-sm font-medium tracking-wide"
+            className="text-xs md:text-sm font-medium tracking-wide"
             style={{
               color: "rgba(255, 255, 255, 0.85)",
             }}
@@ -145,8 +150,9 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
           
           {/* Hand cursor icon */}
           <motion.svg
-            width="20"
-            height="20"
+            width="16"
+            height="16"
+            className="md:w-5 md:h-5"
             viewBox="0 0 24 24"
             fill="none"
             stroke="rgba(255, 255, 255, 0.7)"
@@ -189,7 +195,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
 
             return (
               <g key={`edge-input-hidden-${i}`}>
-                {/* Base connection line with sequential emergence */}
                 <motion.line
                   x1={`${from.x}%`}
                   y1={`${from.y}%`}
@@ -213,7 +218,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   }}
                 />
                 
-                {/* Active animated line */}
                 {isActive && (
                   <motion.line
                     x1={`${from.x}%`}
@@ -245,7 +249,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
 
             return (
               <g key={`edge-hidden-output-${i}`}>
-                {/* Base connection line with sequential emergence */}
                 <motion.line
                   x1={`${from.x}%`}
                   y1={`${from.y}%`}
@@ -269,7 +272,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   }}
                 />
                 
-                {/* Active animated line */}
                 {isActive && (
                   <motion.line
                     x1={`${from.x}%`}
@@ -312,18 +314,18 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 left: `${node.x}%`, 
                 top: `${node.y}%`,
               }}
-              // Sequential emergence animation by layer
               initial={{ scale: 0, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{
                 duration: timing.duration,
                 delay: timing.delay,
-                ease: [0.34, 1.56, 0.64, 1], // Spring bounce
+                ease: [0.34, 1.56, 0.64, 1],
               }}
               whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {/* NODE CIRCLE */}
+              {/* NODE CIRCLE - Responsive sizing */}
               <motion.div
                 className="relative rounded-full flex items-center justify-center"
                 style={{
@@ -336,7 +338,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                     ? "0 0 35px rgba(255, 255, 255, 0.25), 0 8px 24px rgba(0, 0, 0, 0.3)"
                     : "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
-                // Initial emergence glow
                 initial={{ 
                   boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
                 }}
@@ -349,8 +350,12 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 }}
                 viewport={{ once: true }}
                 animate={{
-                  width: activeNode ? "64px" : "80px",
-                  height: activeNode ? "64px" : "80px",
+                  width: activeNode 
+                    ? typeof window !== 'undefined' && window.innerWidth < 768 ? "48px" : "64px"
+                    : typeof window !== 'undefined' && window.innerWidth < 768 ? "56px" : "80px",
+                  height: activeNode 
+                    ? typeof window !== 'undefined' && window.innerWidth < 768 ? "48px" : "64px"
+                    : typeof window !== 'undefined' && window.innerWidth < 768 ? "56px" : "80px",
                   boxShadow: isActive
                     ? [
                         "0 0 35px rgba(255, 255, 255, 0.25), 0 8px 24px rgba(0, 0, 0, 0.3)",
@@ -360,7 +365,6 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                     : "0 4px 16px rgba(0, 0, 0, 0.2)",
                 }}
                 transition={{
-                  // Merged all transition configs into one
                   width: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   height: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
                   boxShadow: {
@@ -387,7 +391,11 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 >
                   <Icon 
                     className="relative z-10"
-                    size={activeNode ? 28 : 32}
+                    size={
+                      activeNode 
+                        ? (typeof window !== 'undefined' && window.innerWidth < 768 ? 20 : 28)
+                        : (typeof window !== 'undefined' && window.innerWidth < 768 ? 24 : 32)
+                    }
                     strokeWidth={1.5}
                     style={{
                       color: isActive ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.75)",
@@ -397,7 +405,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                 </motion.div>
               </motion.div>
 
-              {/* LABEL - Only visible when active */}
+              {/* LABEL - Only visible when active on desktop */}
               <motion.div
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ 
@@ -405,7 +413,7 @@ export default function NeuralMatrix({ activeNode, setActiveNode }: Props) {
                   y: isActive ? 0 : -5,
                 }}
                 transition={{ duration: 0.3 }}
-                className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none"
+                className="absolute top-full mt-2 md:mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none hidden md:block"
               >
                 <div 
                   className="px-3 py-1.5 rounded-lg text-xs font-medium tracking-wide"
