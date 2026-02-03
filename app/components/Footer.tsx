@@ -94,13 +94,13 @@ export default function Footer() {
 
             {/* Navigation and Contact Unit - Slide in from right */}
             <motion.div 
-              className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 flex-shrink-0"
+              className="flex flex-row sm:flex-row gap-8 sm:gap-12 md:gap-16 flex-shrink-0"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 30 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               {/* Navigation */}
-              <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4 flex-1">
                 <motion.h3 
                   className="text-sm sm:text-base font-semibold text-white"
                   initial={{ opacity: 0, y: -10 }}
@@ -147,7 +147,7 @@ export default function Footer() {
               </div>
 
               {/* Contact */}
-              <div className="flex flex-col gap-3 sm:gap-4 justify-between">
+              <div className="flex flex-col gap-3 sm:gap-4 justify-between flex-1">
                 <div>
                   <motion.h3 
                     className="text-sm sm:text-base font-semibold text-white mb-2 sm:mb-3"
