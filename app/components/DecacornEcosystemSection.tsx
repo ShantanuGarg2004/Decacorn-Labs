@@ -31,139 +31,71 @@ export default function DecacornEcosystemSection() {
       ref={sectionRef}
       className="relative w-full py-24 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      {/* Interconnected Network Background */}
+      {/* ── Background ── */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Hexagonal Grid */}
-        <svg className="absolute inset-0 w-full h-full opacity-10">
+
+        {/* Hexagonal tiling — "interconnected structure" */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          style={{ opacity: 0.08 }}
+          preserveAspectRatio="xMidYMid slice"
+        >
           <defs>
-            <pattern id="hexagons" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-              <polygon 
-                points="30,0 60,17 60,35 30,52 0,35 0,17" 
-                fill="none" 
-                stroke="rgba(255,255,255,0.2)" 
-                strokeWidth="0.5"
+            <pattern
+              id="hexPattern"
+              x="0"
+              y="0"
+              width="70"
+              height="121"
+              patternUnits="userSpaceOnUse"
+            >
+              {/* Two rows of hexagons offset to tile seamlessly */}
+              <polygon
+                points="35,2 68,20 68,56 35,74 2,56 2,20"
+                fill="none"
+                stroke="rgba(99, 102, 241, 1)"
+                strokeWidth="0.8"
+              />
+              <polygon
+                points="35,63 68,81 68,117 35,135 2,117 2,81"
+                fill="none"
+                stroke="rgba(99, 102, 241, 1)"
+                strokeWidth="0.8"
               />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#hexagons)"/>
+          <rect width="100%" height="100%" fill="url(#hexPattern)" />
         </svg>
 
-        {/* Connected Nodes Network */}
-        <svg className="absolute inset-0 w-full h-full opacity-20">
-          {/* Connection lines */}
-          {[
-            [[20, 30], [50, 40]],
-            [[50, 40], [80, 35]],
-            [[20, 30], [35, 60]],
-            [[35, 60], [65, 65]],
-            [[65, 65], [80, 35]],
-            [[50, 40], [65, 65]],
-          ].map((line, i) => (
-            <motion.line
-              key={i}
-              x1={`${line[0][0]}%`}
-              y1={`${line[0][1]}%`}
-              x2={`${line[1][0]}%`}
-              y2={`${line[1][1]}%`}
-              stroke="rgba(139, 92, 246, 0.3)"
-              strokeWidth="1"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.3 }}
-              transition={{
-                duration: 1.5,
-                delay: 0.5 + i * 0.1,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-          
-          {/* Network nodes */}
-          {[
-            [20, 30],
-            [50, 40],
-            [80, 35],
-            [35, 60],
-            [65, 65],
-          ].map((pos, i) => (
-            <motion.circle
-              key={i}
-              cx={`${pos[0]}%`}
-              cy={`${pos[1]}%`}
-              r="4"
-              fill="rgba(139, 92, 246, 0.5)"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ 
-                scale: [0, 1.2, 1],
-                opacity: [0, 1, 0.5],
-              }}
-              transition={{
-                duration: 0.8,
-                delay: 0.8 + i * 0.15,
-              }}
-            >
-              <animate
-                attributeName="r"
-                values="4;6;4"
-                dur="3s"
-                repeatCount="indefinite"
-              />
-            </motion.circle>
-          ))}
-        </svg>
-
-        {/* Glowing Orbs */}
+        {/* One slow-breathing indigo wash — center */}
         <motion.div
-          className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-20"
+          className="absolute rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
-            filter: 'blur(60px)',
+            top: "50%",
+            left: "50%",
+            width: "520px",
+            height: "420px",
+            transform: "translate(-50%, -50%)",
+            background:
+              "radial-gradient(ellipse, rgba(99, 102, 241, 0.14) 0%, transparent 70%)",
+            filter: "blur(85px)",
           }}
-          animate={{
-            scale: [1, 1.15, 1],
-            x: [0, 20, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.06, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Floating Particles */}
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-purple-400/40 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -40, 0],
-              opacity: [0, 0.6, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
         {/* Vignette */}
-        <div 
+        <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.5) 100%)',
+            background:
+              "radial-gradient(ellipse at 50% 50%, transparent 28%, rgba(0,0,0,0.72) 100%)",
           }}
         />
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        {/* Title */}
         <h2
           className={`text-3xl font-semibold text-white mb-6 transition-all duration-700 ease-out
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -171,7 +103,6 @@ export default function DecacornEcosystemSection() {
           Decacorn Ecosystem
         </h2>
 
-        {/* Description */}
         <p
           className={`text-neutral-400 max-w-2xl leading-relaxed transition-all duration-700 delay-150 ease-out
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -180,7 +111,6 @@ export default function DecacornEcosystemSection() {
           teams, and organizations from intelligence to execution.
         </p>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           {[
             {
@@ -216,7 +146,6 @@ export default function DecacornEcosystemSection() {
           ))}
         </div>
 
-        {/* CTA Button */}
         <div
           className={`mt-14 transition-all duration-700 delay-[700ms]
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}

@@ -49,106 +49,59 @@ export default function VisionSection() {
       id="vision"
       className="relative w-full py-28 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      {/* Futuristic Grid Background */}
+      {/* ── Background ── */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Perspective Grid */}
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-            transform: 'perspective(1000px) rotateX(60deg)',
-            transformOrigin: 'center top',
-          }}
-        />
-        
-        {/* Glowing Orb - Center */}
-        <motion.div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-15"
-          style={{
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.15, 0.25, 0.15],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
 
-        {/* Diagonal Light Rays */}
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute h-full w-1"
-              style={{
-                left: `${20 + i * 15}%`,
-                background: 'linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3), transparent)',
-                transform: 'skewX(-20deg)',
-              }}
-              animate={{
-                opacity: [0.1, 0.3, 0.1],
-              }}
-              transition={{
-                duration: 3,
-                delay: i * 0.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Floating Particles */}
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1.5 h-1.5 bg-purple-400/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -50, 0],
-              opacity: [0, 0.5, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        {/* Vignette */}
-        <div 
+        {/* Perspective grid — conveys depth, "looking into the future" */}
+        <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%)',
+            backgroundImage: `
+              linear-gradient(rgba(99, 102, 241, 0.11) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(99, 102, 241, 0.11) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+            transform: "perspective(900px) rotateX(58deg)",
+            transformOrigin: "center top",
+            opacity: 0.5,
+          }}
+        />
+
+        {/* One slow-breathing indigo wash — upper center */}
+        <motion.div
+          className="absolute rounded-full"
+          style={{
+            top: "8%",
+            left: "50%",
+            width: "580px",
+            height: "480px",
+            transform: "translateX(-50%)",
+            background:
+              "radial-gradient(ellipse, rgba(99, 102, 241, 0.15) 0%, transparent 70%)",
+            filter: "blur(90px)",
+          }}
+          animate={{ opacity: [0.65, 1, 0.65], scale: [1, 1.05, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 25%, transparent 30%, rgba(0,0,0,0.72) 100%)",
           }}
         />
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        {/* Title */}
         <Reveal>
           <h2 className="text-3xl md:text-4xl font-semibold text-white max-w-3xl">
             Building Intelligence, Not Just Software
           </h2>
         </Reveal>
 
-        {/* Core Vision Statement */}
         <Reveal delay={150}>
           <p className="mt-6 text-neutral-400 max-w-2xl text-lg leading-relaxed">
             At Decacorn Labs, our vision is to transform how humans and systems
@@ -157,12 +110,9 @@ export default function VisionSection() {
           </p>
         </Reveal>
 
-        {/* Vision Pillars */}
         <div className="mt-20 grid md:grid-cols-3 gap-8">
-          {/* Pillar 1 */}
           <Reveal delay={200}>
-            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm 
-            hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
+            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
               <h3 className="text-white font-medium text-lg">
                 From Tools to Intelligence
               </h3>
@@ -174,10 +124,8 @@ export default function VisionSection() {
             </div>
           </Reveal>
 
-          {/* Pillar 2 */}
           <Reveal delay={350}>
-            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm 
-            hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
+            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
               <h3 className="text-white font-medium text-lg">
                 Execution as a System
               </h3>
@@ -188,10 +136,8 @@ export default function VisionSection() {
             </div>
           </Reveal>
 
-          {/* Pillar 3 */}
           <Reveal delay={500}>
-            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm 
-            hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
+            <div className="p-6 rounded-xl border border-neutral-800 bg-neutral-900/40 backdrop-blur-sm hover:-translate-y-1 hover:border-neutral-600 transition-all duration-300">
               <h3 className="text-white font-medium text-lg">
                 Human-AI Collaboration
               </h3>
@@ -202,7 +148,6 @@ export default function VisionSection() {
           </Reveal>
         </div>
 
-        {/* Bold Statement (Signature Line) */}
         <Reveal delay={650}>
           <div className="mt-24 p-8 rounded-xl border border-neutral-800 bg-black/40 text-center backdrop-blur-sm">
             <p className="text-xl md:text-2xl font-medium text-white">

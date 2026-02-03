@@ -50,8 +50,8 @@ export default function Footer() {
           }}
         />
 
-        <div className="max-w-7xl mx-auto px-12 py-16 relative z-10">
-          <div className="flex justify-between items-start gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12 md:py-16 relative z-10">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8 md:gap-12">
             {/* Logo and Copyright - Slide in from left */}
             <motion.div 
               className="flex flex-col flex-shrink-0"
@@ -67,7 +67,7 @@ export default function Footer() {
                 <motion.img 
                   src="/decacorn-logo.svg" 
                   alt="Decacorn Labs Logo" 
-                  className="w-10 h-10"
+                  className="w-8 h-8 sm:w-10 sm:h-10"
                   initial={{ rotate: -180, opacity: 0 }}
                   animate={{ 
                     rotate: isVisible ? 0 : -180, 
@@ -80,10 +80,10 @@ export default function Footer() {
                     stiffness: 100
                   }}
                 />
-                <span className="text-base font-semibold">Decacorn Labs</span>
+                <span className="text-sm sm:text-base font-semibold">Decacorn Labs</span>
               </motion.div>
               <motion.p 
-                className="text-sm text-gray-400 leading-snug pl-3"
+                className="text-xs sm:text-sm text-gray-400 leading-snug pl-2 sm:pl-3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: isVisible ? 1 : 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
@@ -94,22 +94,22 @@ export default function Footer() {
 
             {/* Navigation and Contact Unit - Slide in from right */}
             <motion.div 
-              className="flex gap-16 flex-shrink-0"
+              className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 flex-shrink-0"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 30 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
               {/* Navigation */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4">
                 <motion.h3 
-                  className="text-base font-semibold text-white"
+                  className="text-sm sm:text-base font-semibold text-white"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -10 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
                 >
                   Navigation
                 </motion.h3>
-                <nav className="flex flex-col gap-3">
+                <nav className="flex flex-col gap-2 sm:gap-3">
                   {[
                     { href: "/", label: "Home" },
                     { href: "/#services", label: "Services" },
@@ -125,7 +125,7 @@ export default function Footer() {
                     >
                       <Link 
                         href={link.href}
-                        className="text-sm text-gray-400 hover:text-white transition-all duration-300 inline-block group"
+                        className="text-xs sm:text-sm text-gray-400 hover:text-white transition-all duration-300 inline-block group"
                       >
                         <motion.span
                           className="relative"
@@ -147,17 +147,17 @@ export default function Footer() {
               </div>
 
               {/* Contact */}
-              <div className="flex flex-col gap-4 justify-between">
+              <div className="flex flex-col gap-3 sm:gap-4 justify-between">
                 <div>
                   <motion.h3 
-                    className="text-base font-semibold text-white mb-3"
+                    className="text-sm sm:text-base font-semibold text-white mb-2 sm:mb-3"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -10 }}
                     transition={{ duration: 0.4, delay: 0.6 }}
                   >
                     Contact
                   </motion.h3>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2 sm:gap-3">
                     {[
                       { href: "tel:+918447242034", label: "+91 8447242034" },
                       { href: "tel:+917452897444", label: "+91 7452897444" },
@@ -166,7 +166,7 @@ export default function Footer() {
                       <motion.a
                         key={contact.href}
                         href={contact.href}
-                        className="text-sm text-gray-400 hover:text-white transition-all duration-300 group"
+                        className="text-xs sm:text-sm text-gray-400 hover:text-white transition-all duration-300 group"
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 10 }}
                         transition={{ duration: 0.4, delay: 0.7 + index * 0.05 }}
@@ -181,7 +181,7 @@ export default function Footer() {
                 {/* Get Started Button with animations */}
                 <motion.button 
                   onClick={() => setModalOpen(true)}
-                  className="w-full bg-white text-black font-semibold py-2.5 px-4 rounded-lg text-sm relative overflow-hidden group"
+                  className="w-full sm:w-auto bg-white text-black font-semibold py-2 sm:py-2.5 px-4 rounded-lg text-xs sm:text-sm relative overflow-hidden group"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
@@ -220,13 +220,13 @@ export default function Footer() {
 
           {/* Bottom Gradient Text Watermark with parallax effect */}
           <motion.div 
-            className="mt-8 pt-4 relative"
+            className="mt-6 sm:mt-8 pt-4 relative"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
             transition={{ duration: 0.8, delay: 1 }}
           >
             <motion.div 
-              className="text-7xl md:text-9xl font-bold text-center pointer-events-none select-none leading-none" 
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl font-bold text-center pointer-events-none select-none leading-none" 
               style={{ 
                 color: 'rgba(255, 255, 255, 0.05)', 
                 background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.06) 100%)', 
@@ -248,24 +248,24 @@ export default function Footer() {
 
             {/* Animated underline accent */}
             <motion.div
-              className="mx-auto mt-4"
+              className="mx-auto mt-3 sm:mt-4"
               style={{
                 height: '1px',
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
               }}
               initial={{ width: 0 }}
-              animate={{ width: isVisible ? '40%' : 0 }}
+              animate={{ width: isVisible ? '60%' : 0 }}
               transition={{ duration: 1, delay: 1.2 }}
             />
           </motion.div>
 
-          {/* Floating particles effect */}
+          {/* Floating particles effect - reduced on mobile */}
           {isVisible && (
             <>
               {[...Array(8)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 bg-white rounded-full opacity-20"
+                  className="absolute w-0.5 h-0.5 sm:w-1 sm:h-1 bg-white rounded-full opacity-20 hidden sm:block"
                   style={{
                     left: `${10 + i * 12}%`,
                     top: `${20 + (i % 3) * 20}%`,

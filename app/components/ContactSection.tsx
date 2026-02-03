@@ -38,89 +38,60 @@ export default function ContactSection() {
       ref={sectionRef}
       className="relative w-full py-24 border-t border-neutral-800 overflow-hidden bg-black"
     >
-      {/* Clean Communication Background */}
+      {/* ── Background ── */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Subtle Grid */}
-        <div 
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-          }}
-        />
 
-        {/* Communication Signal Waves */}
-        <div className="absolute inset-0">
-          {[...Array(4)].map((_, i) => (
-            <motion.div
+        {/* Concentric rings — "signal / reach out", perfectly static */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          style={{ opacity: 0.07 }}
+          viewBox="0 0 1000 1000"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          {[120, 200, 290, 390, 500, 620, 750].map((r, i) => (
+            <circle
               key={i}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/10"
-              style={{
-                width: '200px',
-                height: '200px',
-              }}
-              animate={{
-                width: ['200px', '800px'],
-                height: ['200px', '800px'],
-                opacity: [0.3, 0],
-              }}
-              transition={{
-                duration: 4,
-                delay: i * 1,
-                repeat: Infinity,
-                ease: "easeOut",
-              }}
+              cx="500"
+              cy="500"
+              r={r}
+              fill="none"
+              stroke="rgba(99, 102, 241, 1)"
+              strokeWidth={i === 0 ? 1.2 : 0.7}
             />
           ))}
-        </div>
+          {/* Small center dot */}
+          <circle cx="500" cy="500" r="5" fill="rgba(99, 102, 241, 0.6)" />
+        </svg>
 
-        {/* Connection Dots */}
-        {[
-          { x: '25%', y: '30%' },
-          { x: '50%', y: '50%' },
-          { x: '75%', y: '30%' },
-        ].map((pos, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 rounded-full bg-blue-400/40"
-            style={{ left: pos.x, top: pos.y }}
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.4, 0.8, 0.4],
-            }}
-            transition={{
-              duration: 2,
-              delay: i * 0.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        {/* Glowing Center */}
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+        {/* One slow-breathing indigo wash — dead center over the rings */}
+        <motion.div
+          className="absolute rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-            filter: 'blur(80px)',
+            top: "50%",
+            left: "50%",
+            width: "480px",
+            height: "400px",
+            transform: "translate(-50%, -50%)",
+            background:
+              "radial-gradient(ellipse, rgba(99, 102, 241, 0.13) 0%, transparent 68%)",
+            filter: "blur(80px)",
           }}
+          animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.05, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
 
         {/* Vignette */}
-        <div 
+        <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%)',
+            background:
+              "radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(0,0,0,0.72) 100%)",
           }}
         />
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        {/* Title */}
         <h2
           className={`text-3xl font-semibold text-white mb-6 transition-all duration-700 ease-out
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -128,7 +99,6 @@ export default function ContactSection() {
           Connect with Decacorn
         </h2>
 
-        {/* Subtitle */}
         <p
           className={`text-neutral-400 max-w-2xl leading-relaxed transition-all duration-700 delay-150 ease-out
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -137,7 +107,6 @@ export default function ContactSection() {
           execution systems, we'd love to connect.
         </p>
 
-        {/* Contact Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
           {/* Phone */}
           <div
