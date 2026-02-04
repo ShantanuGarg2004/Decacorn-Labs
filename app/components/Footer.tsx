@@ -166,7 +166,7 @@ export default function Footer() {
                       <motion.a
                         key={contact.href}
                         href={contact.href}
-                        className="text-xs sm:text-sm text-gray-400 hover:text-white transition-all duration-300 group"
+                        className="text-xs sm:text-sm text-gray-400 hover:text-white transition-all duration-300 group whitespace-nowrap"
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 10 }}
                         transition={{ duration: 0.4, delay: 0.7 + index * 0.05 }}
@@ -181,7 +181,7 @@ export default function Footer() {
                 {/* Get Started Button with animations */}
                 <motion.button 
                   onClick={() => setModalOpen(true)}
-                  className="w-full sm:w-auto bg-white text-black font-semibold py-2 sm:py-2.5 px-4 rounded-lg text-xs sm:text-sm relative overflow-hidden group"
+                  className="w-full sm:w-auto bg-white text-black font-semibold py-2 sm:py-2.5 px-4 rounded-lg text-xs sm:text-sm relative overflow-hidden group whitespace-nowrap"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
