@@ -16,9 +16,9 @@ interface SectionParticlesProps {
 }
 
 export default function SectionParticles({
-  density = 60,
-  opacity = 0.6,
-  size = 2,
+  density = 55,
+  opacity = 0.5,
+  size = 1.8,
 }: SectionParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -43,8 +43,8 @@ export default function SectionParticles({
     const particles: Particle[] = Array.from({ length: density }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.15,
-      vy: (Math.random() - 0.5) * 0.15,
+      vx: (Math.random() - 0.5) * 0.08,
+      vy: (Math.random() - 0.5) * 0.08,
     }));
 
     const animate = () => {

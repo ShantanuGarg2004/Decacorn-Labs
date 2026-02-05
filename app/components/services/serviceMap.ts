@@ -10,12 +10,26 @@ import {
   Server,
 } from "lucide-react";
 
-/* ---------- TYPES ---------- */
+/* =========================================================
+   SERVICE GRAPH TYPES
+   ---------------------------------------------------------
+   This file defines a directed, layered service graph
+   following a neural-network metaphor:
+   Input Layer → Hidden Layer → Output Layer
+   ========================================================= */
 
+export type ServiceLayer = "input" | "hidden" | "output";
+
+/**
+ * A ServiceNode represents a single node in the service graph.
+ * - `x` and `y` are normalized layout coordinates (0–100),
+ *   interpreted by the visual renderer (NeuralMatrix).
+ * - `icon` is a visual identifier only; no behavior is attached.
+ */
 export type ServiceNode = {
   id: string;
   label: string;
-  layer: "input" | "hidden" | "output";
+  layer: ServiceLayer;
   x: number;
   y: number;
   icon: any;
@@ -25,10 +39,17 @@ export type ServiceNode = {
   technologies: string[];
 };
 
-/* ---------- NODES - 3-4-2 NEURAL NETWORK ---------- */
+/* =========================================================
+   NODE DEFINITIONS
+   ---------------------------------------------------------
+   3–4–2 layered neural network:
+   - 3 Input nodes
+   - 4 Hidden nodes
+   - 2 Output nodes
+   ========================================================= */
 
 export const nodes: ServiceNode[] = [
-  /* INPUT LAYER (3 nodes) */
+  /* ---------------- INPUT LAYER ---------------- */
   {
     id: "data",
     label: "Data Sources",
@@ -81,7 +102,7 @@ export const nodes: ServiceNode[] = [
     technologies: ["Zapier", "MuleSoft", "REST APIs", "GraphQL", "RabbitMQ"],
   },
 
-  /* HIDDEN LAYER (4 nodes) */
+  /* ---------------- HIDDEN LAYER ---------------- */
   {
     id: "llm",
     label: "LLM Intelligence",
@@ -151,7 +172,7 @@ export const nodes: ServiceNode[] = [
     technologies: ["Apache Airflow", "Prefect", "Temporal", "Kubernetes", "Docker"],
   },
 
-  /* OUTPUT LAYER (2 nodes) */
+  /* ---------------- OUTPUT LAYER ---------------- */
   {
     id: "cloud",
     label: "Cloud Platforms",
@@ -188,30 +209,32 @@ export const nodes: ServiceNode[] = [
   },
 ];
 
-/* ---------- EDGES - FULLY CONNECTED LAYERS ---------- */
+/* =========================================================
+   GRAPH TOPOLOGY
+   ---------------------------------------------------------
+   Edges are derived, not manually authored.
+   This enforces a strictly layered neural architecture:
+   Input → Hidden → Output
+   ========================================================= */
+
+const inputNodes = nodes.filter((n) => n.layer === "input");
+const hiddenNodes = nodes.filter((n) => n.layer === "hidden");
+const outputNodes = nodes.filter((n) => n.layer === "output");
 
 export const edges = {
-  // Input layer to Hidden layer (3x4 = 12 connections)
-  inputToHidden: nodes
-    .filter((n) => n.layer === "input")
-    .flatMap((input) =>
-      nodes
-        .filter((n) => n.layer === "hidden")
-        .map((hidden) => ({
-          from: input.id,
-          to: hidden.id,
-        }))
-    ),
+  // Fully connected: Input → Hidden (3 × 4)
+  inputToHidden: inputNodes.flatMap((input) =>
+    hiddenNodes.map((hidden) => ({
+      from: input.id,
+      to: hidden.id,
+    }))
+  ),
 
-  // Hidden layer to Output layer (4x2 = 8 connections)
-  hiddenToOutput: nodes
-    .filter((n) => n.layer === "hidden")
-    .flatMap((hidden) =>
-      nodes
-        .filter((n) => n.layer === "output")
-        .map((output) => ({
-          from: hidden.id,
-          to: output.id,
-        }))
-    ),
+  // Fully connected: Hidden → Output (4 × 2)
+  hiddenToOutput: hiddenNodes.flatMap((hidden) =>
+    outputNodes.map((output) => ({
+      from: hidden.id,
+      to: output.id,
+    }))
+  ),
 };

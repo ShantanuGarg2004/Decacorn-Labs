@@ -8,6 +8,13 @@ type HeroSectionProps = {
 };
 
 export default function HeroSection({ onGetStarted }: HeroSectionProps) {
+  const handleExplore = () => {
+    const nextSection = document.querySelector("#capabilities");
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -65,6 +72,7 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
           className="mt-10 flex gap-4"
         >
           <motion.button
+            onClick={handleExplore}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             className="px-6 py-3 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-sm hover:bg-white/20 transition"

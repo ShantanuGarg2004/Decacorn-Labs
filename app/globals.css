@@ -1,15 +1,94 @@
 @import "tailwindcss";
 
+/* =========================
+   Root Design Tokens
+   ========================= */
 :root {
   --background: #000000;
   --foreground: #ffffff;
+
+  /* Motion durations */
+  --motion-fast: 0.2s;
+  --motion-medium: 0.4s;
+  --motion-slow: 0.8s;
+
+  /* Motion easing */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Opacity hierarchy */
+  --opacity-primary: 1;
+  --opacity-secondary: 0.8;
+  --opacity-tertiary: 0.6;
+  --opacity-muted: 0.4;
+
+  /* Surface language */
+  --surface-highlight: rgba(255, 255, 255, 0.05);
+  --surface-border: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================
+   Global Box Model
+   ========================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =========================
+   Base Document
+   ========================= */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* ✅ Native smooth scrolling */
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-    "Helvetica Neue", sans-serif;
+
+  font-family: var(--font-primary), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+
+  line-height: 1.6;
+  letter-spacing: -0.005em;
   overflow-x: hidden;
+}
+
+/* =========================
+   Typography Defaults
+   ========================= */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+p {
+  line-height: 1.7;
+}
+
+/* =========================
+   Selection
+   ========================= */
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   Media
+   ========================= */
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }

@@ -19,6 +19,7 @@ export async function POST(req: Request) {
       description,
     } = body;
 
+    // Basic validation (keep backend strict, UI minimal)
     if (!name || !email || !company || !service) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -26,46 +27,81 @@ export async function POST(req: Request) {
       );
     }
 
+    /* ──────────────────────────────────────────────
+       INTERNAL EMAIL (ADMIN / TEAM)
+    ────────────────────────────────────────────── */
     await resend.emails.send({
       from: process.env.FROM_EMAIL!,
       to: process.env.CONTACT_RECEIVER_EMAIL!,
-      subject: `New Lead — ${name}`,
+      subject: `New Get Started Request — ${name}`,
       html: `
-        <h2>New Get Started Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || "—"}</p>
-        <p><strong>Company:</strong> ${company}</p>
-        <p><strong>Company Domain:</strong> ${companyDomain || "—"}</p>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Description:</strong></p>
-        <p>${description || "—"}</p>
+        <div style="font-family: Arial, sans-serif; color: #111; line-height: 1.6;">
+          <h2 style="margin-bottom: 6px;">New Get Started Submission</h2>
+          <p style="margin-top: 0; color: #555;">
+            A new request has been submitted via the website.
+          </p>
+
+          <hr style="margin: 24px 0;" />
+
+          <h3 style="margin-bottom: 8px;">Contact Information</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || "—"}</p>
+
+          <hr style="margin: 24px 0;" />
+
+          <h3 style="margin-bottom: 8px;">Company & Project</h3>
+          <p><strong>Company:</strong> ${company}</p>
+          <p><strong>Industry:</strong> ${companyDomain || "—"}</p>
+          <p><strong>Project Type:</strong> ${service}</p>
+
+          <hr style="margin: 24px 0;" />
+
+          <h3 style="margin-bottom: 8px;">Project Description</h3>
+          <p style="white-space: pre-line; color: #333;">
+            ${description || "—"}
+          </p>
+        </div>
       `,
     });
 
+    /* ──────────────────────────────────────────────
+       USER CONFIRMATION EMAIL
+    ────────────────────────────────────────────── */
     await resend.emails.send({
       from: process.env.FROM_EMAIL!,
       to: email,
-      subject: "We received your message — Decacorn Labs",
+      subject: "We received your request — Decacorn Labs",
       html: `
-        <p>Hi ${name},</p>
+        <div style="font-family: Arial, sans-serif; color: #111; line-height: 1.6;">
+          <p>Hi ${name},</p>
 
-        <p>
-          Thanks for reaching out to <strong>Decacorn Labs</strong>.
-          We've received your message and someone from our team
-          will review it shortly.
-        </p>
+          <p>
+            Thank you for reaching out to <strong>Decacorn Labs</strong>.
+            We’ve received your request and our team is currently reviewing
+            the details you shared.
+          </p>
 
-        <p>
-          You can expect a response within <strong>24 hours</strong>.
-          If your request is urgent, feel free to reply directly
-          to this email.
-        </p>
+          <p>
+            You can expect a response from us within
+            <strong>24 hours</strong>.
+          </p>
 
-        <p>
-          — Decacorn Labs<br />
-          <em>Building AI systems that think, guide, and execute</em>
-        </p>
+          <p>
+            If your request is time-sensitive, feel free to reply directly
+            to this email and we’ll prioritize accordingly.
+          </p>
+
+          <br />
+
+          <p>
+            Best regards,<br />
+            <strong>Decacorn Labs</strong><br />
+            <span style="color: #555;">
+              Building AI systems that think, guide, and execute
+            </span>
+          </p>
+        </div>
       `,
     });
 

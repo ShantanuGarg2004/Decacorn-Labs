@@ -142,7 +142,7 @@ export default function VisionSection() {
                 Human-AI Collaboration
               </h3>
               <p className="mt-3 text-neutral-400 text-sm leading-relaxed">
-                Our long-term vision is not to replace humans, but to amplify decision-making with AI systems that learn, adapt, and support choices.
+                Our long-term vision is to amplify human decision-making by using AI systems that learn, adapt over time, and support better, faster, and more informed choices.
               </p>
             </div>
           </Reveal>
