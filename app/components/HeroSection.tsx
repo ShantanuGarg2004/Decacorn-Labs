@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import SectionParticles from "./SectionParticles";
+import { Particles } from "./SectionParticles";
 
 type HeroSectionProps = {
   onGetStarted: () => void;
@@ -33,8 +33,16 @@ export default function HeroSection({ onGetStarted }: HeroSectionProps) {
         transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* Particles */}
-      <SectionParticles density={65} size={1.6} opacity={0.65} />
+      {/* Enhanced Particles with Cursor Interaction */}
+      <Particles
+        className="absolute inset-0 z-[1]"
+        quantity={30}
+        ease={50}
+        color="#ffffff"
+        size={1.6}
+        staticity={50}
+        refresh={false}
+      />
 
       {/* Overlay */}
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/60 via-black/25 to-black/70" />

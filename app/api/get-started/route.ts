@@ -1,12 +1,52 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { supabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// 🔐 Simple in-memory rate limiter
+const rateLimitMap = new Map<
+  string,
+  { count: number; timestamp: number }
+>();
+
 export async function POST(req: Request) {
   try {
+    /* ──────────────────────────────────────────────
+       🔹 RATE LIMITING (5 req per minute per IP)
+    ────────────────────────────────────────────── */
+    const ip =
+      req.headers.get("x-forwarded-for") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+
+    const now = Date.now();
+    const windowSize = 60 * 1000; // 1 minute
+    const maxRequests = 5;
+
+    const record = rateLimitMap.get(ip);
+
+    if (record) {
+      if (now - record.timestamp < windowSize) {
+        if (record.count >= maxRequests) {
+          return NextResponse.json(
+            { error: "Too many requests. Try again later." },
+            { status: 429 }
+          );
+        }
+        record.count++;
+      } else {
+        rateLimitMap.set(ip, { count: 1, timestamp: now });
+      }
+    } else {
+      rateLimitMap.set(ip, { count: 1, timestamp: now });
+    }
+
+    /* ──────────────────────────────────────────────
+       🔹 PARSE BODY
+    ────────────────────────────────────────────── */
     const body = await req.json();
 
     const {
@@ -19,7 +59,9 @@ export async function POST(req: Request) {
       description,
     } = body;
 
-    // Basic validation (keep backend strict, UI minimal)
+    /* ──────────────────────────────────────────────
+       🔹 BASIC VALIDATION
+    ────────────────────────────────────────────── */
     if (!name || !email || !company || !service) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -28,45 +70,55 @@ export async function POST(req: Request) {
     }
 
     /* ──────────────────────────────────────────────
-       INTERNAL EMAIL (ADMIN / TEAM)
+       🔹 DUPLICATE PROTECTION (24 HOURS)
     ────────────────────────────────────────────── */
-    await resend.emails.send({
-      from: process.env.FROM_EMAIL!,
-      to: process.env.CONTACT_RECEIVER_EMAIL!,
-      subject: `New Get Started Request — ${name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; color: #111; line-height: 1.6;">
-          <h2 style="margin-bottom: 6px;">New Get Started Submission</h2>
-          <p style="margin-top: 0; color: #555;">
-            A new request has been submitted via the website.
-          </p>
+    const twentyFourHoursAgo = new Date(
+      Date.now() - 24 * 60 * 60 * 1000
+    ).toISOString();
 
-          <hr style="margin: 24px 0;" />
+    const { data: existingLead, error: fetchError } = await supabase
+      .from("leads")
+      .select("id")
+      .eq("email", email)
+      .gte("created_at", twentyFourHoursAgo)
+      .limit(1);
 
-          <h3 style="margin-bottom: 8px;">Contact Information</h3>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone || "—"}</p>
+    if (fetchError) {
+      console.error("Duplicate check error:", fetchError);
+    }
 
-          <hr style="margin: 24px 0;" />
-
-          <h3 style="margin-bottom: 8px;">Company & Project</h3>
-          <p><strong>Company:</strong> ${company}</p>
-          <p><strong>Industry:</strong> ${companyDomain || "—"}</p>
-          <p><strong>Project Type:</strong> ${service}</p>
-
-          <hr style="margin: 24px 0;" />
-
-          <h3 style="margin-bottom: 8px;">Project Description</h3>
-          <p style="white-space: pre-line; color: #333;">
-            ${description || "—"}
-          </p>
-        </div>
-      `,
-    });
+    if (existingLead && existingLead.length > 0) {
+      return NextResponse.json(
+        { error: "You have already submitted a request recently." },
+        { status: 429 }
+      );
+    }
 
     /* ──────────────────────────────────────────────
-       USER CONFIRMATION EMAIL
+       🔹 STORE IN SUPABASE
+    ────────────────────────────────────────────── */
+    const { error: insertError } = await supabase.from("leads").insert([
+      {
+        name,
+        email,
+        phone,
+        company,
+        company_domain: companyDomain,
+        service,
+        description,
+      },
+    ]);
+
+    if (insertError) {
+      console.error("Supabase insert error:", insertError);
+      return NextResponse.json(
+        { error: "Failed to store lead" },
+        { status: 500 }
+      );
+    }
+
+    /* ──────────────────────────────────────────────
+       🔹 SEND CONFIRMATION EMAIL
     ────────────────────────────────────────────── */
     await resend.emails.send({
       from: process.env.FROM_EMAIL!,
@@ -78,28 +130,19 @@ export async function POST(req: Request) {
 
           <p>
             Thank you for reaching out to <strong>Decacorn Labs</strong>.
-            We’ve received your request and our team is currently reviewing
+            We’ve received your request and our team is reviewing
             the details you shared.
           </p>
 
           <p>
-            You can expect a response from us within
-            <strong>24 hours</strong>.
-          </p>
-
-          <p>
-            If your request is time-sensitive, feel free to reply directly
-            to this email and we’ll prioritize accordingly.
+            You can expect a response within <strong>24 hours</strong>.
           </p>
 
           <br />
 
           <p>
             Best regards,<br />
-            <strong>Decacorn Labs</strong><br />
-            <span style="color: #555;">
-              Building AI systems that think, guide, and execute
-            </span>
+            <strong>Decacorn Labs</strong>
           </p>
         </div>
       `,
@@ -107,10 +150,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Get Started API error:", error);
+    console.error("API error:", error);
 
     return NextResponse.json(
-      { error: "Failed to send emails" },
+      { error: "Server error" },
       { status: 500 }
     );
   }
