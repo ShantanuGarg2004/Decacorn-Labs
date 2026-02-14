@@ -299,16 +299,22 @@ export default function ContactSection() {
             <h3 className="text-white font-medium mb-3">Phone</h3>
             <div className="space-y-2 text-sm text-neutral-400">
               <button
-                onClick={() => copyToClipboard("8447242034", "phone1")}
+                onClick={() => copyToClipboard("7452897444", "phone2")}
                 className="block hover:text-white transition-colors"
               >
-                +91 8447242034
+                +91 7060243009
               </button>
               <button
                 onClick={() => copyToClipboard("7452897444", "phone2")}
                 className="block hover:text-white transition-colors"
               >
-                +91 7452897444
+                +91 9958007208
+              </button>
+              <button
+                onClick={() => copyToClipboard("8447242034", "phone1")}
+                className="block hover:text-white transition-colors"
+              >
+                +91 8447242034
               </button>
             </div>
             {copied?.startsWith("phone") && (
@@ -333,13 +339,19 @@ export default function ContactSection() {
               onClick={() => copyToClipboard("ayushsharma1709@gmail.com", "email1")}
               className="text-sm text-neutral-400 hover:text-white transition-colors block mb-2"
             >
-              ayushsharma1709@gmail.com
+              debjyoti.saha@alumna.ai
+            </button>
+            <button
+              onClick={() => copyToClipboard("ayushsharma1709@gmail.com", "email1")}
+              className="text-sm text-neutral-400 hover:text-white transition-colors block mb-2"
+            >
+              ddey@alumna.ai
             </button>
             <button
               onClick={() => copyToClipboard("hr@alumna.ai", "email2")}
               className="text-sm text-neutral-400 hover:text-white transition-colors block"
             >
-              hr@alumna.ai
+              ayush.sharma@alumna.ai
             </button>
             {(copied === "email1" || copied === "email2") && (
               <p className="mt-3 text-xs text-neutral-500">Copied to clipboard</p>
@@ -360,10 +372,9 @@ export default function ContactSection() {
           >
             <h3 className="text-white font-medium mb-3">Office</h3>
             <p className="text-sm text-neutral-400 leading-relaxed">
-              114, 1st Floor, 43-A, <br />
-              Iksana Workspaces, IT Park, <br />
-              Sahastradhara Road, Dehradun, <br />
-              Uttarakhand – 248001
+              Dehradun <br />
+              New Delhi <br />
+              Leeds(UK) <br />
             </p>
           </div>
         </div>

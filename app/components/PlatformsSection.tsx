@@ -17,7 +17,7 @@ const platforms = [
       "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1600&auto=format&fit=crop",
   },
   {
-    name: "Krivisio.io",
+    name: "Glip.io",
     tagline: "AI-powered execution engine for modern teams.",
     summary:
       "An AI execution engine that converts raw project inputs into structured roadmaps, tasks, and delivery workflows.",
