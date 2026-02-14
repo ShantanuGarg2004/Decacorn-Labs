@@ -344,7 +344,7 @@ export default function PlatformsSection() {
                     {platform.summary}
                   </CardItem>
 
-                  <div className="flex justify-between items-center mt-8">
+                  {/* <div className="flex justify-between items-center mt-8">
                     <CardItem
                       translateZ={20}
                       as="button"
@@ -369,7 +369,7 @@ export default function PlatformsSection() {
                     >
                       Explore
                     </CardItem>
-                  </div>
+                  </div> */}
                 </CardBody>
               </CardContainer>
             </motion.div>
